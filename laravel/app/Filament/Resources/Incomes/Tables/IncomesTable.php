@@ -20,6 +20,10 @@ class IncomesTable
                     ->label('Income Category')
                     ->searchable()
                     ->sortable(),
+                TextColumn::make('account.name')
+                    ->label('Account')
+                    ->searchable()
+                    ->sortable(),
                 TextColumn::make('amount')
                     ->label('Amount')
                     ->formatStateUsing(function ($state, $record) {

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use App\Settings\GeneralSettings;
 use App\Models\Currency;
@@ -48,6 +49,16 @@ class Account extends Model
     public function amountCurrency(): BelongsTo
     {
         return $this->belongsTo(Currency::class, 'amount_currency_id');
+    }
+
+    public function incomes(): HasMany
+    {
+        return $this->hasMany(Income::class);
+    }
+
+    public function expenses(): HasMany
+    {
+        return $this->hasMany(Expense::class);
     }
 
     public function amountNormalized(): Attribute

@@ -38,6 +38,12 @@ class IncomeForm
                     ->searchable()
                     ->preload()
                     ->required(),
+                Select::make('account_id')
+                    ->relationship('account', 'name')
+                    ->label('Account')
+                    ->searchable()
+                    ->preload()
+                    ->required(),
                 TextInput::make('amount')
                     ->label('Amount')
                     ->required()

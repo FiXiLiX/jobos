@@ -16,6 +16,7 @@ use App\Filament\Widgets\MonthSpendingChart;
 use App\Filament\Widgets\SpendingByCategory;
 use App\Filament\Widgets\IncomeByCategory;
 use Leandrocfe\FilamentApexCharts\FilamentApexChartsPlugin;
+use EightyNine\Reports\ReportsPlugin;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -54,6 +55,7 @@ class AdminPanelProvider extends PanelProvider
             ->plugins([
                 FilamentShieldPlugin::make(),
                 FilamentApexChartsPlugin::make(),
+                ReportsPlugin::make(),
             ])
             ->plugin(\TomatoPHP\FilamentUsers\FilamentUsersPlugin::make())
             ->authMiddleware([

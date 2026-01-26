@@ -360,7 +360,49 @@
                 <table class="min-w-full text-left text-sm budget-table fi-ta-table table-fixed">
                         <thead>
                             <tr>
-                                <th colspan="6" style="padding: 0.75rem 1rem; text-align: center; font-size: 1rem; font-weight: 600;">{{ $monthLabel }}</th>
+                                <th colspan="6" style="padding: 0.75rem 1rem; font-size: 1rem; font-weight: 600;">
+                                    <div style="display:flex;align-items:center;justify-content:center;gap:8px;">
+                                        <span>{{ $monthLabel }}</span>
+                                        <div style="position: relative;">
+                                            <button
+                                                type="button"
+                                                wire:click.stop="$toggle('showOptions')"
+                                                aria-label="Options"
+                                                style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;border:1px solid #d1d5db;border-radius:8px;background:#f9fafb;color:#111827;"
+                                            >
+                                                <x-filament::icon icon="heroicon-o-ellipsis-horizontal" class="w-5 h-5" />
+                                            </button>
+                                            @if($showOptions)
+                                                <div style="position:absolute;right:0;margin-top:0.5rem;width:220px;border-radius:8px;box-shadow:0 10px 15px -3px rgba(0,0,0,0.1);background:#ffffff;border:1px solid rgba(0,0,0,0.05);z-index:10;">
+                                                    <div style="padding:0.25rem 0;">
+                                                        <button
+                                                            type="button"
+                                                            wire:click.stop="copyPreviousMonthBudget"
+                                                            style="display:block;width:100%;text-align:left;padding:0.5rem 0.75rem;font-size:0.875rem;color:#111827;background:transparent;border:none;cursor:pointer;"
+                                                            onmouseover="this.style.background='#f3f4f6'" onmouseout="this.style.background='transparent'"
+                                                        >
+                                                            <span style="display:flex;align-items:center;gap:0.5rem;">
+                                                                <x-filament::icon icon="heroicon-o-arrow-up-tray" class="w-4 h-4" />
+                                                                <span>Copy previous month budget</span>
+                                                            </span>
+                                                        </button>
+                                                        <button
+                                                            type="button"
+                                                            wire:click.stop="resetBudget"
+                                                            style="display:block;width:100%;text-align:left;padding:0.5rem 0.75rem;font-size:0.875rem;color:#111827;background:transparent;border:none;cursor:pointer;"
+                                                            onmouseover="this.style.background='#f3f4f6'" onmouseout="this.style.background='transparent'"
+                                                        >
+                                                            <span style="display:flex;align-items:center;gap:0.5rem;">
+                                                                <x-filament::icon icon="heroicon-o-arrow-path" class="w-4 h-4" />
+                                                                <span>Reset budget</span>
+                                                            </span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </th>
                             </tr>
                             <tr>
                                 <th style="width: 25%;">Category</th>

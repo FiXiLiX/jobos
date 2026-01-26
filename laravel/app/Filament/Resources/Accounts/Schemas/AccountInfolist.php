@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Accounts\Schemas;
 use App\Models\Account;
 use Filament\Infolists\Components\IconEntry;
 use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Schemas\Schema;
 use App\Settings\GeneralSettings;
 
@@ -35,6 +36,36 @@ class AccountInfolist
                 TextEntry::make('updated_at')
                     ->dateTime()
                     ->placeholder('-'),
+                RepeatableEntry::make('incomes')
+                    ->label('Incomes')
+                    ->schema([
+                        TextEntry::make('budgetIncome.name')
+                            ->label('Category'),
+                        TextEntry::make('amount')
+                            ->label('Amount')
+                            ->formatStateUsing(fn($state, $record) => number_format($state, 2) . ' ' . ($record->amountCurrency?->code ?? 'USD')),
+                        TextEntry::make('execution_date')
+                            ->label('Date')
+                            ->date(),
+                        TextEntry::make('createdBy.name')
+                            ->label('Created By'),
+                    ])
+                    ->columns(4),
+                RepeatableEntry::make('expenses')
+                    ->label('Expenses')
+                    ->schema([
+                        TextEntry::make('budgetSubcategory.name')
+                            ->label('Category'),
+                        TextEntry::make('amount')
+                            ->label('Amount')
+                            ->formatStateUsing(fn($state, $record) => number_format($state, 2) . ' ' . ($record->amountCurrency?->code ?? 'USD')),
+                        TextEntry::make('execution_date')
+                            ->label('Date')
+                            ->date(),
+                        TextEntry::make('recipient.name')
+                            ->label('Recipient'),
+                    ])
+                    ->columns(4),
             ]);
     }
 }

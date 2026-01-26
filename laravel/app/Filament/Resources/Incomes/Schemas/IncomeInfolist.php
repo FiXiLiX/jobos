@@ -17,6 +17,8 @@ class IncomeInfolist
             ->components([
                 TextEntry::make('budgetIncome.name')
                     ->label('Income Category'),
+                TextEntry::make('account.name')
+                    ->label('Account'),
                 TextEntry::make('amount')
                     ->label('Amount')
                     ->formatStateUsing(fn($state, $record) => $state . ' ' . ($record->amountCurrency?->code ?? 'USD')),

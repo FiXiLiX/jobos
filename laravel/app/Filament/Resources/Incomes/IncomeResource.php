@@ -22,7 +22,7 @@ class IncomeResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBanknotes;
 
-    protected static ?string $navigationLabel = 'Income';
+    protected static ?string $navigationLabel = 'Incomes';
 
     protected static ?int $navigationSort = 4;
 

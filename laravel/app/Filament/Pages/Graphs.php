@@ -17,6 +17,7 @@ class Graphs extends Page
 
     public string $selectedMonth;
     public array $monthOptions = [];
+    public ?string $selectedCategoryForSpending = null;
 
     public function mount(): void
     {

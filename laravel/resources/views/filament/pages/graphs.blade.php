@@ -12,8 +12,8 @@
         <div style="flex-grow: 3;" class="md:mr-4">
             @livewire(\App\Filament\Widgets\SpendingByCategory::class, ['filter' => $this->selectedMonth], key('spending-' . $this->selectedMonth))
         </div>
-        <div style="flex-grow: 3;" class="md:ml-4">
-            @livewire(\App\Filament\Widgets\IncomeByCategory::class, ['filter' => $this->selectedMonth], key('income-' . $this->selectedMonth))
+        <div style="flex-grow: 3;" class="md:mr-4">
+            @livewire(\App\Filament\Widgets\SpendingInCategory::class, ['filter' => $this->selectedMonth], key('spending-in-category-' . $this->selectedMonth))
         </div>
     </div>
     <div class="mt-4">
@@ -21,5 +21,13 @@
     </div>
     <div class="mt-4">
         @livewire(\App\Filament\Widgets\NetWorthChart::class)
+    </div>
+    <div class="grid grid-cols-2 gap-4 mt-4" style="display: flex;justify-content: space-between; flex-wrap: wrap;">
+        <div style="flex-grow: 3;" class="md:ml-4">
+            @livewire(\App\Filament\Widgets\IncomeByCategory::class, ['filter' => $this->selectedMonth], key('income-' . $this->selectedMonth))
+        </div>
+        <div style="flex-grow: 3;" class="md:ml-4">
+            @livewire(\App\Filament\Widgets\AccountBalances::class, key('account-balances'))
+        </div>
     </div>
 </x-filament-panels::page>

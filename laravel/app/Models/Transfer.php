@@ -22,6 +22,22 @@ class Transfer extends Model
         'amount_received' => 'decimal:2',
     ];
 
+    public static function boot()
+    {
+        parent::boot();
+
+        static::saving(function ($model) {
+            // Auto-set currency codes from related accounts if not already set
+            if (!$model->amount_taken_currency_code && $model->fromAccount) {
+                $model->amount_taken_currency_code = $model->fromAccount->amountCurrency?->code ?? 'USD';
+            }
+            
+            if (!$model->amount_received_currency_code && $model->toAccount) {
+                $model->amount_received_currency_code = $model->toAccount->amountCurrency?->code ?? 'USD';
+            }
+        });
+    }
+
     public function fromAccount(): BelongsTo
     {
         return $this->belongsTo(Account::class, 'from_account_id');

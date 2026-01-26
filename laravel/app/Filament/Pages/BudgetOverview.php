@@ -6,6 +6,7 @@ use App\Models\Budget;
 use App\Models\BudgetCategory;
 use App\Models\BudgetSubcategory;
 use App\Models\BudgetSubcategoryBudgeted;
+use App\Models\BudgetCategoryBudgeted;
 use Carbon\Carbon;
 use Filament\Actions\Action;
 use Filament\Forms\Components\TextInput;
@@ -33,6 +34,8 @@ class BudgetOverview extends Page
 
     public array $editingBudgeted = [];
 
+    public bool $showOptions = false;
+
     public function mount(): void
     {
         $this->currentMonth = Carbon::now()->startOfMonth()->toDateString();
@@ -49,6 +52,76 @@ class BudgetOverview extends Page
     public function nextMonth(): void
     {
         $this->shiftMonth(1);
+    }
+
+    public function copyPreviousMonthBudget(): void
+    {
+        $date = Carbon::parse($this->currentMonth);
+        $previousDate = $date->copy()->subMonthNoOverflow();
+
+        // Ensure current budget exists
+        $this->budget = Budget::firstOrCreate([
+            'year' => $date->year,
+            'month' => $date->month,
+        ]);
+
+        // Find previous month budget
+        $previousBudget = Budget::where('year', $previousDate->year)
+            ->where('month', $previousDate->month)
+            ->first();
+
+        if (!$previousBudget) {
+            $this->showOptions = false;
+            return;
+        }
+
+        // Copy expense budgeted amounts
+        $previousSubBudgets = BudgetSubcategoryBudgeted::where('budget_id', $previousBudget->id)->get();
+        foreach ($previousSubBudgets as $entry) {
+            BudgetSubcategoryBudgeted::updateOrCreate(
+                [
+                    'budget_id' => $this->budget->id,
+                    'subcategory_id' => $entry->subcategory_id,
+                ],
+                [
+                    'budgeted' => $entry->budgeted,
+                ]
+            );
+        }
+
+        // Copy income expected amounts
+        $previousIncomeBudgets = BudgetCategoryBudgeted::where('budget_id', $previousBudget->id)->get();
+        foreach ($previousIncomeBudgets as $entry) {
+            BudgetCategoryBudgeted::updateOrCreate(
+                [
+                    'budget_id' => $this->budget->id,
+                    'budget_income_id' => $entry->budget_income_id,
+                ],
+                [
+                    'expected' => $entry->expected,
+                    'created_by' => $entry->created_by,
+                ]
+            );
+        }
+
+        $this->showOptions = false;
+        $this->loadCategories();
+        $this->loadIncomes();
+    }
+
+    public function resetBudget(): void
+    {
+        if (!$this->budget) {
+            $this->showOptions = false;
+            return;
+        }
+
+        BudgetSubcategoryBudgeted::where('budget_id', $this->budget->id)->update(['budgeted' => 0]);
+        BudgetCategoryBudgeted::where('budget_id', $this->budget->id)->update(['expected' => 0]);
+
+        $this->showOptions = false;
+        $this->loadCategories();
+        $this->loadIncomes();
     }
 
     public function updateBudgeted(int $subcategoryId, float $value): void
@@ -68,6 +141,7 @@ class BudgetOverview extends Page
         );
 
         $this->loadCategories();
+        $this->loadIncomes();
     }
 
     public function updateExpected(int $incomeId, float $value): void
@@ -215,6 +289,8 @@ class BudgetOverview extends Page
             ->addMonthsNoOverflow($delta)
             ->startOfMonth()
             ->toDateString();
+
+        $this->showOptions = false;
 
         $this->loadBudget();
         $this->loadCategories();

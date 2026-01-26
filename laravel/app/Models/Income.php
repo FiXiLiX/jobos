@@ -14,6 +14,7 @@ class Income extends Model
         'amount_currency_id',
         'amount_normalized',
         'execution_date',
+        'account_id',
         'created_by',
     ];
 
@@ -31,6 +32,11 @@ class Income extends Model
     public function amountCurrency(): BelongsTo
     {
         return $this->belongsTo(Currency::class, 'amount_currency_id');
+    }
+
+    public function account(): BelongsTo
+    {
+        return $this->belongsTo(Account::class);
     }
 
     public static function boot()

@@ -8,6 +8,7 @@
     "require": {
         "php": "^8.2",
         "bezhansalleh/filament-shield": "*",
+        "eightynine/filament-reports": "^4.0",
         "filament/filament": "^4.0",
         "filament/spatie-laravel-settings-plugin": "^4.6",
         "laravel/framework": "^12.0",
