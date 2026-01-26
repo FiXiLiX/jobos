@@ -1,0 +1,24 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::table('accounts', function (Blueprint $table) {
+            $table->foreignId('amount_currency_id')->nullable()->constrained('currencies')->onDelete('restrict');
+            $table->float('amount_normalized')->nullable();
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::table('accounts', function (Blueprint $table) {
+            $table->dropForeignKeyIfExists(['amount_currency_id']);
+            $table->dropColumn(['amount_currency_id', 'amount_normalized']);
+        });
+    }
+};
