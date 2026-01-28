@@ -86,7 +86,8 @@ class MonthBudgetReport extends Report
                 Table::make()
                     ->columns([
                         TextColumn::make('date')->label('Date'),
-                        TextColumn::make('category')->label('Category'),
+                        TextColumn::make('subcategory')->label('Subcategory'),
+                        TextColumn::make('recipient')->label('Recipient'),
                         TextColumn::make('amount')->label('Amount'),
                         TextColumn::make('normalized')->label('Normalized'),
                     ])
@@ -169,31 +170,32 @@ class MonthBudgetReport extends Report
             return 0;
         }
 
-        // Start with the initial account amount
+        // Start with the current balance
         $balance = $account->amount;
 
-        // Get all income transactions for this account up to and including the date
-        $incomeTotal = Income::where('account_id', $accountId)
-            ->where('execution_date', '<=', $date)
+        // To get balance at a past date, we need to reverse all transactions after that date
+        // Subtract income that happened after the date (reverse it)
+        $incomeAfterDate = Income::where('account_id', $accountId)
+            ->where('execution_date', '>', $date)
             ->sum('amount');
 
-        // Get all expense transactions up to and including the date
-        $expenseTotal = Expense::where('execution_date', '<=', $date)
-            ->where('account_id', $accountId)
+        // Add back expenses that happened after the date (reverse it)
+        $expenseAfterDate = Expense::where('account_id', $accountId)
+            ->where('execution_date', '>', $date)
             ->sum('amount');
 
-        // Get all outgoing transfers up to and including the date
-        $outgoingTransfers = Transfer::where('from_account_id', $accountId)
-            ->where('created_at', '<=', $date . ' 23:59:59')
+        // Add back outgoing transfers that happened after the date (reverse it)
+        $outgoingTransfersAfterDate = Transfer::where('from_account_id', $accountId)
+            ->where('created_at', '>', $date . ' 23:59:59')
             ->sum('amount_taken');
 
-        // Get all incoming transfers up to and including the date
-        $incomingTransfers = Transfer::where('to_account_id', $accountId)
-            ->where('created_at', '<=', $date . ' 23:59:59')
+        // Subtract incoming transfers that happened after the date (reverse it)
+        $incomingTransfersAfterDate = Transfer::where('to_account_id', $accountId)
+            ->where('created_at', '>', $date . ' 23:59:59')
             ->sum('amount_received');
 
-        // Balance = initial amount + income - expenses + transfers in - transfers out
-        $balance = $account->amount + $incomeTotal - $expenseTotal + $incomingTransfers - $outgoingTransfers;
+        // Balance at date = current balance - income after + expenses after + outgoing transfers after - incoming transfers after
+        $balance = $balance - $incomeAfterDate + $expenseAfterDate + $outgoingTransfersAfterDate - $incomingTransfersAfterDate;
 
         return $balance;
     }
@@ -219,7 +221,7 @@ class MonthBudgetReport extends Report
         return Expense::query()
             ->where('budget_subcategory_id', $subcategoryId)
             ->whereBetween('execution_date', [$month->toDateString(), $month->copy()->endOfMonth()->toDateString()])
-            ->sum('amount');
+            ->sum('amount_normalized');
     }
 
     protected function getIncomeRows(Carbon $month)
@@ -243,16 +245,13 @@ class MonthBudgetReport extends Report
         $base = strtoupper(app(GeneralSettings::class)->default_currency);
 
         return Expense::query()
-            ->with(['budgetSubcategory.category', 'amountCurrency'])
+            ->with(['budgetSubcategory', 'recipient', 'amountCurrency'])
             ->whereBetween('execution_date', [$month->toDateString(), $month->copy()->endOfMonth()->toDateString()])
             ->get()
             ->map(fn ($expense) => [
                 'date' => optional($expense->execution_date)->format('Y-m-d'),
-                'category' => sprintf(
-                    '%s / %s',
-                    $expense->budgetSubcategory?->category?->name ?? 'Uncategorized',
-                    $expense->budgetSubcategory?->name ?? '—'
-                ),
+                'subcategory' => $expense->budgetSubcategory?->name ?? '—',
+                'recipient' => $expense->recipient?->name ?? '—',
                 'amount' => number_format((float) $expense->amount, 2).' '.($expense->amountCurrency?->code ?? ''),
                 'normalized' => number_format((float) $expense->amount_normalized, 2).' '.$base,
             ]);

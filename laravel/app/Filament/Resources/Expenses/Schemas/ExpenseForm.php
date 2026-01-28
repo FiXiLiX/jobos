@@ -3,11 +3,13 @@
 namespace App\Filament\Resources\Expenses\Schemas;
 
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
 use App\Settings\GeneralSettings;
 use App\Models\Currency;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 
 class ExpenseForm
 {
@@ -73,6 +75,33 @@ class ExpenseForm
                     ->required()
                     ->label('Budget Subcategory')
                     ->searchable(),
+                FileUpload::make('bill_picture')
+                    ->label('Bill Picture')
+                    ->disk('local')
+                    ->directory('livewire-tmp')
+                    ->image()
+                    ->imageResizeMode('cover')
+                    ->imageCropAspectRatio('16 / 9')
+                    ->imageResizeTargetWidth(1920)
+                    ->imageResizeTargetHeight(1080)
+                    ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
+                    ->maxSize(5120)
+                    ->nullable()
+                    ->afterStateHydrated(function ($component, $record) {
+                        if ($record && $media = $record->getFirstMedia('bill_pictures')) {
+                            $component->state([$media->file_name]);
+                        }
+                    })
+                    ->dehydrated(false)
+                    ->saveUploadedFileUsing(function (TemporaryUploadedFile $file, $record) {
+                        if ($record) {
+                            $record->clearMediaCollection('bill_pictures');
+                            $record->addMedia($file->getRealPath())
+                                ->usingFileName($file->getClientOriginalName())
+                                ->toMediaCollection('bill_pictures', 's3');
+                        }
+                        return null;
+                    }),
             ]);
     }
 }

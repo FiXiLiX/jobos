@@ -1,0 +1,127 @@
+### Jobos API Testing
+### Rest Client for testing API endpoints
+
+@baseUrl = http://localhost:8000
+@apiUrl = {{baseUrl}}/api
+
+### Variables
+@accountId = 1
+@token = 2|cS7OlHqvz3IMtw7lA5lEkJfEae4Pd2I8Os1yoTF628bc77c8
+@email = filip.kovacevic@pm.me
+@password = testtest
+
+###
+### ========== AUTHENTICATION ==========
+
+### 1. Login
+POST {{apiUrl}}/auth/login
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "{{email}}",
+  "password": "{{password}}"
+}
+
+###
+### 2. Logout
+POST {{apiUrl}}/auth/logout
+Accept: application/json
+Authorization: Bearer {{token}}
+
+###
+### ========== ACCOUNTS ==========
+
+### 1. List all accounts
+GET {{apiUrl}}/admin/accounts
+Accept: application/json
+Authorization: Bearer {{token}}
+
+###
+### 2. Get account by ID
+GET {{apiUrl}}/admin/accounts/{{accountId}}
+Accept: application/json
+Authorization: Bearer {{token}}
+
+###
+### 3. Create a new account
+POST {{apiUrl}}/admin/accounts
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{token}}
+
+{
+  "name": "New Test Account",
+  "amount": 5000.00,
+  "amount_currency_id": 1,
+  "on_budget": true
+}
+
+###
+### 4. Update account
+PATCH {{apiUrl}}/admin/accounts/{{accountId}}
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{token}}
+
+{
+  "name": "Updated Account Name",
+  "amount": 7500.00
+}
+
+###
+### 5. Delete account
+DELETE {{apiUrl}}/admin/accounts/{{accountId}}
+Accept: application/json
+Authorization: Bearer {{token}}
+
+###
+### 6. List accounts with pagination
+GET {{apiUrl}}/admin/accounts?per_page=10&page=1
+Accept: application/json
+Authorization: Bearer {{token}}
+
+###
+### 7. Search accounts
+GET {{apiUrl}}/admin/accounts?search=Test
+Accept: application/json
+Authorization: Bearer {{token}}
+
+###
+### 8. Sort accounts by creation date (descending)
+GET {{apiUrl}}/admin/accounts?sort=-created_at
+Accept: application/json
+Authorization: Bearer {{token}}
+
+###
+### 9. Sort accounts by name (ascending)
+GET {{apiUrl}}/admin/accounts?sort=name
+Accept: application/json
+Authorization: Bearer {{token}}
+
+###
+### 10. Get multiple accounts by ID
+GET {{apiUrl}}/admin/accounts?id=1,2,3
+Accept: application/json
+Authorization: Bearer {{token}}
+
+###
+### ========== ADDITIONAL ENDPOINTS ==========
+
+### Get account with relationships
+# GET {{apiUrl}}/admin/accounts/6
+GET {{apiUrl}}/admin/accounts/6?include=expenses,incomes
+Accept: application/json
+Authorization: Bearer {{token}}
+
+###
+### Filter with multiple criteria
+GET {{apiUrl}}/admin/accounts?name=Test&per_page=5
+Accept: application/json
+Authorization: Bearer {{token}}
+
+###
+### Get with custom fields
+GET {{apiUrl}}/admin/accounts?fields=id,name,amount
+Accept: application/json
+Authorization: Bearer {{token}}

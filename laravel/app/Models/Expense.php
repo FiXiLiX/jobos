@@ -4,12 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 use App\Settings\GeneralSettings;
 use App\Models\Currency;
 use App\Models\CurrencyExchange;
 
-class Expense extends Model
+class Expense extends Model implements HasMedia
 {
+    use InteractsWithMedia;
+
     protected $fillable = [
         'amount',
         'amount_currency_id',
@@ -25,6 +29,13 @@ class Expense extends Model
         'amount_normalized' => 'decimal:2',
         'execution_date' => 'date',
     ];
+
+    public function registerMediaCollections(): void
+    {
+        $this
+            ->addMediaCollection('bill_pictures')
+            ->singleFile();
+    }
 
     public static function boot()
     {

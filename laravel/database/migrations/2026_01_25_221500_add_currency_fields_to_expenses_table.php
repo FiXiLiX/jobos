@@ -23,8 +23,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('expenses', function (Blueprint $table) {
-            $table->dropForeignKeyIfExists(['amount_currency_id']);
-            $table->dropColumn(['amount_currency_id', 'amount_normalized']);
+            $table->dropConstrainedForeignId('amount_currency_id');
         });
     }
 };

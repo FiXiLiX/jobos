@@ -152,74 +152,103 @@
         .dark .budget-row-subcategory td {
             color: rgb(209 213 219);
         }
+        .budget-btn-group {
+            display: inline-flex;
+            gap: 0;
+            border-radius: 0.375rem;
+            overflow: hidden;
+            border: 1px solid rgba(209, 213, 219, 0.5);
+            background-color: rgba(249, 250, 251, 0.5);
+            padding: 2px;
+            margin-left: 0.75rem;
+        }
+        .dark .budget-btn-group {
+            border-color: rgba(75, 85, 99, 0.5);
+            background-color: rgba(31, 41, 55, 0.3);
+        }
         .budget-btn-add {
             font-size: 0.75rem;
             font-weight: 600;
-            color: rgb(255 255 255);
-            background-color: rgb(37 99 235);
-            border-radius: 0.25rem;
-            padding: 0.25rem;
-            width: 20px;
-            height: 20px;
+            color: rgb(59 130 246);
+            background-color: transparent;
+            border: none;
+            border-radius: 0;
+            padding: 0.375rem;
+            width: 28px;
+            height: 28px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
         }
         .budget-btn-add:hover {
-            background-color: rgb(29 78 216);
+            background-color: rgba(59, 130, 246, 0.15);
+            color: rgb(37 99 235);
         }
         .dark .budget-btn-add {
-            background-color: rgb(59 130 246);
+            color: rgb(147 197 253);
         }
         .dark .budget-btn-add:hover {
-            background-color: rgb(37 99 235);
+            background-color: rgba(147, 197, 253, 0.15);
+            color: rgb(191 219 254);
         }
         .budget-btn-delete {
             font-size: 0.75rem;
             font-weight: 600;
-            color: rgb(255 255 255);
-            background-color: rgb(220 38 38);
-            border-radius: 0.25rem;
-            padding: 0.25rem;
-            width: 20px;
-            height: 20px;
+            color: rgb(239 68 68);
+            background-color: transparent;
+            border: none;
+            border-radius: 0;
+            padding: 0.375rem;
+            width: 28px;
+            height: 28px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
         }
         .budget-btn-delete:hover {
-            background-color: rgb(185 28 28);
+            background-color: rgba(239, 68, 68, 0.15);
+            color: rgb(220 38 38);
         }
         .dark .budget-btn-delete {
-            background-color: rgb(239 68 68);
+            color: rgb(248 113 113);
         }
         .dark .budget-btn-delete:hover {
-            background-color: rgb(220 38 38);
+            background-color: rgba(248, 113, 113, 0.15);
+            color: rgb(254 202 202);
         }
         .budget-btn-edit {
             font-size: 0.75rem;
             font-weight: 600;
-            color: rgb(255 255 255);
-            background-color: rgb(249 115 22);
-            border-radius: 0.25rem;
-            padding: 0.25rem;
-            width: 20px;
-            height: 20px;
+            color: rgb(251 146 60);
+            background-color: transparent;
+            border: none;
+            border-radius: 0;
+            padding: 0.375rem;
+            width: 28px;
+            height: 28px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
         }
         .budget-btn-edit:hover {
-            background-color: rgb(234 88 12);
+            background-color: rgba(251, 146, 60, 0.15);
+            color: rgb(249 115 22);
         }
         .dark .budget-btn-edit {
-            background-color: rgb(251 146 60);
+            color: rgb(253 186 116);
         }
         .dark .budget-btn-edit:hover {
-            background-color: rgb(249 115 22);
+            background-color: rgba(253, 186, 116, 0.15);
+            color: rgb(254 215 170);
         }
         .budget-input {
             width: 100%;
@@ -443,27 +472,29 @@
                             @endphp
                             <tr>
                                 <td style="padding-left: .5em;">
-                                    <div class="flex items-center gap-2">
+                                    <div class="flex items-center">
                                         <span>{{ $category->name }}</span>
-                                        <button
-                                            type="button"
-                                            wire:click="$dispatch('open-modal', { id: 'edit-category-{{ $category->id }}' })"
-                                            class="budget-btn-edit"
-                                        >
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 14px; height: 14px;">
-                                                <path d="M5.433 13.917 3 14.5l.583-2.433a1.5 1.5 0 0 1 .399-.725l6.67-6.67a1.5 1.5 0 0 1 2.121 0l1.555 1.555a1.5 1.5 0 0 1 0 2.122l-6.67 6.67a1.5 1.5 0 0 1-.725.399Z" />
-                                                <path d="M2 15.75A.75.75 0 0 1 2.75 15h14.5a.75.75 0 0 1 0 1.5H2.75A.75.75 0 0 1 2 15.75Z" />
-                                            </svg>
-                                        </button>
-                                        <button
-                                            type="button"
-                                            wire:click="$dispatch('open-modal', { id: 'create-subcategory-{{ $category->id }}' })"
-                                            class="budget-btn-add"
-                                        >
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 14px; height: 14px;">
-                                                <path d="M10.75 4.75a.75.75 0 0 0-1.5 0v4.5h-4.5a.75.75 0 0 0 0 1.5h4.5v4.5a.75.75 0 0 0 1.5 0v-4.5h4.5a.75.75 0 0 0 0-1.5h-4.5v-4.5Z" />
-                                            </svg>
-                                        </button>
+                                        <div class="budget-btn-group">
+                                            <button
+                                                type="button"
+                                                wire:click="$dispatch('open-modal', { id: 'edit-category-{{ $category->id }}' })"
+                                                class="budget-btn-edit"
+                                            >
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 14px; height: 14px;">
+                                                    <path d="M5.433 13.917 3 14.5l.583-2.433a1.5 1.5 0 0 1 .399-.725l6.67-6.67a1.5 1.5 0 0 1 2.121 0l1.555 1.555a1.5 1.5 0 0 1 0 2.122l-6.67 6.67a1.5 1.5 0 0 1-.725.399Z" />
+                                                    <path d="M2 15.75A.75.75 0 0 1 2.75 15h14.5a.75.75 0 0 1 0 1.5H2.75A.75.75 0 0 1 2 15.75Z" />
+                                                </svg>
+                                            </button>
+                                            <button
+                                                type="button"
+                                                wire:click="$dispatch('open-modal', { id: 'create-subcategory-{{ $category->id }}' })"
+                                                class="budget-btn-add"
+                                            >
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 14px; height: 14px;">
+                                                    <path d="M10.75 4.75a.75.75 0 0 0-1.5 0v4.5h-4.5a.75.75 0 0 0 0 1.5h4.5v4.5a.75.75 0 0 0 1.5 0v-4.5h4.5a.75.75 0 0 0 0-1.5h-4.5v-4.5Z" />
+                                                </svg>
+                                            </button>
+                                        </div>
                                     </div>
                                 </td>
                                 <td>{{ number_format($categoryBudgeted, 2) }} {{ $baseCurrencyCode }}</td>
@@ -479,27 +510,29 @@
                                 @endphp
                                 <tr class="budget-row-subcategory">
                                     <td style="padding-left: 1em;">
-                                        <div class="flex items-center gap-2">
+                                        <div class="flex items-center">
                                             <span>{{ $subcategory->name }}</span>
-                                            <button
-                                                type="button"
-                                                wire:click="$dispatch('open-modal', { id: 'edit-subcategory-{{ $subcategory->id }}' })"
-                                                class="budget-btn-edit"
-                                            >
-                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 14px; height: 14px;">
-                                                    <path d="M5.433 13.917 3 14.5l.583-2.433a1.5 1.5 0 0 1 .399-.725l6.67-6.67a1.5 1.5 0 0 1 2.121 0l1.555 1.555a1.5 1.5 0 0 1 0 2.122l-6.67 6.67a1.5 1.5 0 0 1-.725.399Z" />
-                                                    <path d="M2 15.75A.75.75 0 0 1 2.75 15h14.5a.75.75 0 0 1 0 1.5H2.75A.75.75 0 0 1 2 15.75Z" />
-                                                </svg>
-                                            </button>
-                                            <button
-                                                type="button"
-                                                wire:click="$dispatch('open-modal', { id: 'delete-subcategory-{{ $subcategory->id }}' })"
-                                                class="budget-btn-delete"
-                                            >
-                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 14px; height: 14px;">
-                                                    <path fill-rule="evenodd" d="M8.75 1A2.75 2.75 0 0 0 6 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 1 0 .23 1.482l.149-.022.841 10.518A2.75 2.75 0 0 0 7.596 19h4.807a2.75 2.75 0 0 0 2.742-2.53l.841-10.52.149.023a.75.75 0 0 0 .23-1.482A41.03 41.03 0 0 0 14 4.193V3.75A2.75 2.75 0 0 0 11.25 1h-2.5ZM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4ZM8.58 7.72a.75.75 0 0 0-1.5.06l.3 7.5a.75.75 0 1 0 1.5-.06l-.3-7.5Zm4.34.06a.75.75 0 1 0-1.5-.06l-.3 7.5a.75.75 0 1 0 1.5.06l.3-7.5Z" clip-rule="evenodd" />
-                                                </svg>
-                                            </button>
+                                            <div class="budget-btn-group">
+                                                <button
+                                                    type="button"
+                                                    wire:click="$dispatch('open-modal', { id: 'edit-subcategory-{{ $subcategory->id }}' })"
+                                                    class="budget-btn-edit"
+                                                >
+                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 14px; height: 14px;">
+                                                        <path d="M5.433 13.917 3 14.5l.583-2.433a1.5 1.5 0 0 1 .399-.725l6.67-6.67a1.5 1.5 0 0 1 2.121 0l1.555 1.555a1.5 1.5 0 0 1 0 2.122l-6.67 6.67a1.5 1.5 0 0 1-.725.399Z" />
+                                                        <path d="M2 15.75A.75.75 0 0 1 2.75 15h14.5a.75.75 0 0 1 0 1.5H2.75A.75.75 0 0 1 2 15.75Z" />
+                                                    </svg>
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    wire:click="$dispatch('open-modal', { id: 'delete-subcategory-{{ $subcategory->id }}' })"
+                                                    class="budget-btn-delete"
+                                                >
+                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 14px; height: 14px;">
+                                                        <path fill-rule="evenodd" d="M8.75 1A2.75 2.75 0 0 0 6 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 1 0 .23 1.482l.149-.022.841 10.518A2.75 2.75 0 0 0 7.596 19h4.807a2.75 2.75 0 0 0 2.742-2.53l.841-10.52.149.023a.75.75 0 0 0 .23-1.482A41.03 41.03 0 0 0 14 4.193V3.75A2.75 2.75 0 0 0 11.25 1h-2.5ZM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4ZM8.58 7.72a.75.75 0 0 0-1.5.06l.3 7.5a.75.75 0 1 0 1.5-.06l-.3-7.5Zm4.34.06a.75.75 0 1 0-1.5-.06l-.3 7.5a.75.75 0 1 0 1.5.06l.3-7.5Z" clip-rule="evenodd" />
+                                                    </svg>
+                                                </button>
+                                            </div>
                                         </div>
                                     </td>
                                     <td>
@@ -696,27 +729,29 @@
                             @endphp
                             <tr>
                                 <td style="padding-left: .5em;">
-                                    <div class="flex items-center gap-2">
+                                    <div class="flex items-center">
                                         <span>{{ $income->name }}</span>
-                                        <button
-                                            type="button"
-                                            wire:click="$dispatch('open-modal', { id: 'edit-income-{{ $income->id }}' })"
-                                            class="budget-btn-edit"
-                                        >
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 14px; height: 14px;">
-                                                <path d="M5.433 13.917 3 14.5l.583-2.433a1.5 1.5 0 0 1 .399-.725l6.67-6.67a1.5 1.5 0 0 1 2.121 0l1.555 1.555a1.5 1.5 0 0 1 0 2.122l-6.67 6.67a1.5 1.5 0 0 1-.725.399Z" />
-                                                <path d="M2 15.75A.75.75 0 0 1 2.75 15h14.5a.75.75 0 0 1 0 1.5H2.75A.75.75 0 0 1 2 15.75Z" />
-                                            </svg>
-                                        </button>
-                                        <button
-                                            type="button"
-                                            wire:click="$dispatch('open-modal', { id: 'delete-income-{{ $income->id }}' })"
-                                            class="budget-btn-delete"
-                                        >
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 14px; height: 14px;">
-                                                <path fill-rule="evenodd" d="M8.75 1A2.75 2.75 0 0 0 6 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 1 0 .23 1.482l.149-.022.841 10.518A2.75 2.75 0 0 0 7.596 19h4.807a2.75 2.75 0 0 0 2.742-2.53l.841-10.52.149.023a.75.75 0 0 0 .23-1.482A41.03 41.03 0 0 0 14 4.193V3.75A2.75 2.75 0 0 0 11.25 1h-2.5ZM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4ZM8.58 7.72a.75.75 0 0 0-1.5.06l.3 7.5a.75.75 0 1 0 1.5-.06l-.3-7.5Zm4.34.06a.75.75 0 1 0-1.5-.06l-.3 7.5a.75.75 0 1 0 1.5.06l.3-7.5Z" clip-rule="evenodd" />
-                                            </svg>
-                                        </button>
+                                        <div class="budget-btn-group">
+                                            <button
+                                                type="button"
+                                                wire:click="$dispatch('open-modal', { id: 'edit-income-{{ $income->id }}' })"
+                                                class="budget-btn-edit"
+                                            >
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 14px; height: 14px;">
+                                                    <path d="M5.433 13.917 3 14.5l.583-2.433a1.5 1.5 0 0 1 .399-.725l6.67-6.67a1.5 1.5 0 0 1 2.121 0l1.555 1.555a1.5 1.5 0 0 1 0 2.122l-6.67 6.67a1.5 1.5 0 0 1-.725.399Z" />
+                                                    <path d="M2 15.75A.75.75 0 0 1 2.75 15h14.5a.75.75 0 0 1 0 1.5H2.75A.75.75 0 0 1 2 15.75Z" />
+                                                </svg>
+                                            </button>
+                                            <button
+                                                type="button"
+                                                wire:click="$dispatch('open-modal', { id: 'delete-income-{{ $income->id }}' })"
+                                                class="budget-btn-delete"
+                                            >
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 14px; height: 14px;">
+                                                    <path fill-rule="evenodd" d="M8.75 1A2.75 2.75 0 0 0 6 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 1 0 .23 1.482l.149-.022.841 10.518A2.75 2.75 0 0 0 7.596 19h4.807a2.75 2.75 0 0 0 2.742-2.53l.841-10.52.149.023a.75.75 0 0 0 .23-1.482A41.03 41.03 0 0 0 14 4.193V3.75A2.75 2.75 0 0 0 11.25 1h-2.5ZM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4ZM8.58 7.72a.75.75 0 0 0-1.5.06l.3 7.5a.75.75 0 1 0 1.5-.06l-.3-7.5Zm4.34.06a.75.75 0 1 0-1.5-.06l-.3 7.5a.75.75 0 1 0 1.5.06l.3-7.5Z" clip-rule="evenodd" />
+                                                </svg>
+                                            </button>
+                                        </div>
                                     </div>
                                 </td>
                                 <td>

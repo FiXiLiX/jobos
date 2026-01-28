@@ -23,7 +23,7 @@ class IncomeByCategory extends ApexChartWidget
             ->with('budgetIncome')
             ->get()
             ->groupBy(fn(Income $income) => $income->budgetIncome?->name ?? 'Uncategorized')
-            ->map(fn($group) => round($group->sum('amount'), 2))
+            ->map(fn($group) => round($group->sum('amount_normalized'), 2))
             ->all();
 
         $labels = array_keys($incomeByCategory);

@@ -16,8 +16,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('transfers', function (Blueprint $table) {
-            $table->dropForeignKeyIfExists(['budget_subcategory_id']);
-            $table->dropColumn(['budget_subcategory_id']);
+            $table->dropConstrainedForeignId('budget_subcategory_id');
         });
     }
 };

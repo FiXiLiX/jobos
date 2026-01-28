@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Expenses\Schemas;
 
+use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Schema;
 use App\Settings\GeneralSettings;
@@ -30,6 +31,12 @@ class ExpenseInfolist
                     ->label('Recipient'),
                 TextEntry::make('budgetSubcategory.name')
                     ->label('Budget Subcategory'),
+                ImageEntry::make('bill_picture')
+                    ->label('Bill Picture')
+                    ->getStateUsing(fn($record) => $record->getFirstMedia('bill_pictures') 
+                        ? route('media.show', ['filename' => $record->getFirstMedia('bill_pictures')->file_name])
+                        : null)
+                    ->visibility(fn($record) => $record->getFirstMedia('bill_pictures') ? 'visible' : 'hidden')
             ]);
     }
 }
