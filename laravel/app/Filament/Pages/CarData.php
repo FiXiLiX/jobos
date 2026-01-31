@@ -12,8 +12,9 @@ use Livewire\Attributes\On;
 
 class CarData extends Page
 {
-    protected static string|\BackedEnum|null $navigationIcon = Heroicon::OutlinedCog6Tooth;
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-truck';
     protected static ?string $navigationLabel = 'Car Data';
+    protected static ?int $navigationSort = 100;
     protected static ?string $slug = 'car-data';
     protected string $view = 'filament.pages.car-data';
 
