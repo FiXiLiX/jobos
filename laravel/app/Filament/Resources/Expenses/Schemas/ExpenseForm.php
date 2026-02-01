@@ -9,6 +9,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
 use App\Settings\GeneralSettings;
 use App\Models\Currency;
+use App\Models\Account;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 
 class ExpenseForm
@@ -43,6 +44,7 @@ class ExpenseForm
                     ->label('Currency')
                     ->options($currencyOptions)
                     ->searchable()
+                    ->optionsLimit(null)
                     ->default(fn() => Currency::where('code', $defaultCurrencyCode)->first()?->id)
                     ->required()
                     ->live(),
@@ -65,6 +67,7 @@ class ExpenseForm
                     ->relationship('recipient', 'name')
                     ->required()
                     ->searchable()
+                    ->optionsLimit(null)
                     ->createOptionForm([
                         TextInput::make('name')
                             ->required()
@@ -74,6 +77,8 @@ class ExpenseForm
                     ->relationship('budgetSubcategory', 'name')
                     ->required()
                     ->label('Budget Subcategory')
+                    ->searchable()
+                    ->optionsLimit(null)
                     ->searchable(),
                 FileUpload::make('bill_picture')
                     ->label('Bill Picture')

@@ -9,14 +9,38 @@ use Carbon\Carbon;
 
 class Finance
 {
+    /**
+     * Get current net worth (sum of all account balances)
+     */
+    public static function currentNetWorth(): float
+    {
+        return (float) Account::sum('amount_normalized');
+    }
+
+    /**
+     * Get net worth at a specific date
+     * For current month: sum of all account balances
+     * For past months: current balance - incomes after that date + expenses after that date
+     */
     public static function netWorthAt(Carbon $date): float
     {
-        // Use normalized amounts to ensure single base currency across accounts and transactions
-        $base = (float) Account::all()->sum(fn ($account) => (float) $account->amount_normalized);
-        $incomeSum = (float) Income::whereDate('execution_date', '<=', $date->toDateString())->sum('amount_normalized');
-        $expenseSum = (float) Expense::whereDate('execution_date', '<=', $date->toDateString())->sum('amount_normalized');
+        $currentNetWorth = self::currentNetWorth();
+        
+        // If the date is in the current month or future, return current net worth
+        if ($date->gte(Carbon::now()->startOfMonth())) {
+            return $currentNetWorth;
+        }
+        
+        // For past months, we need to reverse transactions that happened after the target date
+        // Subtract incomes that happened after this date (they increased our balance)
+        $incomesAfter = (float) Income::whereDate('execution_date', '>', $date->toDateString())
+            ->sum('amount_normalized');
+        
+        // Add back expenses that happened after this date (they decreased our balance)
+        $expensesAfter = (float) Expense::whereDate('execution_date', '>', $date->toDateString())
+            ->sum('amount_normalized');
 
-        return $base + $incomeSum - $expenseSum;
+        return $currentNetWorth - $incomesAfter + $expensesAfter;
     }
 
     public static function netWorthSeries(Carbon $start, Carbon $end): array
