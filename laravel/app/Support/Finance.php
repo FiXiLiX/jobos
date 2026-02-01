@@ -14,7 +14,8 @@ class Finance
      */
     public static function currentNetWorth(): float
     {
-        return (float) Account::sum('amount_normalized');
+        // amount_normalized is an accessor, not a DB column, so we must load all accounts
+        return (float) Account::all()->sum(fn($account) => (float) $account->amount_normalized);
     }
 
     /**

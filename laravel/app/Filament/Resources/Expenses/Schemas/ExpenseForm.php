@@ -44,7 +44,7 @@ class ExpenseForm
                     ->label('Currency')
                     ->options($currencyOptions)
                     ->searchable()
-                    ->optionsLimit(null)
+                    ->optionsLimit(9999)
                     ->default(fn() => Currency::where('code', $defaultCurrencyCode)->first()?->id)
                     ->required()
                     ->live(),
@@ -62,12 +62,14 @@ class ExpenseForm
                 Select::make('account_id')
                     ->relationship('account', 'name')
                     ->required()
-                    ->searchable(),
+                    ->searchable()
+                    ->optionsLimit(9999)
+                    ->default(fn() => Account::where('on_budget', true)->orderBy('created_at')->first()?->id),
                 Select::make('recipient_id')
                     ->relationship('recipient', 'name')
                     ->required()
                     ->searchable()
-                    ->optionsLimit(null)
+                    ->optionsLimit(9999)
                     ->createOptionForm([
                         TextInput::make('name')
                             ->required()
@@ -78,8 +80,7 @@ class ExpenseForm
                     ->required()
                     ->label('Budget Subcategory')
                     ->searchable()
-                    ->optionsLimit(null)
-                    ->searchable(),
+                    ->optionsLimit(9999),
                 FileUpload::make('bill_picture')
                     ->label('Bill Picture')
                     ->disk('local')
