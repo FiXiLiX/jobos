@@ -5,6 +5,7 @@ namespace App\Filament\Widgets;
 use App\Models\Expense;
 use Carbon\Carbon;
 use Leandrocfe\FilamentApexCharts\Widgets\ApexChartWidget;
+use Livewire\Attributes\On;
 
 class SpendingInCategory extends ApexChartWidget
 {
@@ -13,6 +14,12 @@ class SpendingInCategory extends ApexChartWidget
     protected static ?string $heading = 'Spending by Subcategory';
 
     public ?string $monthFilter = null;
+
+    #[On('updateFilter')]
+    public function updateFilter($filter): void
+    {
+        $this->monthFilter = $filter;
+    }
 
     public function mount(array $parameters = []): void
     {

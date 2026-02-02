@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use App\Settings\GeneralSettings;
 use App\Models\Currency;
 use App\Models\CurrencyExchange;
+use App\Models\Transfer;
 
 class Account extends Model
 {
@@ -59,6 +60,16 @@ class Account extends Model
     public function expenses(): HasMany
     {
         return $this->hasMany(Expense::class);
+    }
+
+    public function outgoingTransfers(): HasMany
+    {
+        return $this->hasMany(Transfer::class, 'from_account_id');
+    }
+
+    public function incomingTransfers(): HasMany
+    {
+        return $this->hasMany(Transfer::class, 'to_account_id');
     }
 
     public function amountNormalized(): Attribute

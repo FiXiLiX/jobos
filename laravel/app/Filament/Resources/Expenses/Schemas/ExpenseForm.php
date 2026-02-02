@@ -33,6 +33,28 @@ class ExpenseForm
 
         return $schema
             ->components([
+                Select::make('account_id')
+                    ->relationship('account', 'name')
+                    ->required()
+                    ->searchable()
+                    ->optionsLimit(9999)
+                    ->default(fn() => Account::where('on_budget', true)->orderBy('created_at')->first()?->id),
+                Select::make('budget_subcategory_id')
+                    ->relationship('budgetSubcategory', 'name')
+                    ->required()
+                    ->label('Budget Subcategory')
+                    ->searchable()
+                    ->optionsLimit(9999),
+                Select::make('recipient_id')
+                    ->relationship('recipient', 'name')
+                    ->required()
+                    ->searchable()
+                    ->optionsLimit(9999)
+                    ->createOptionForm([
+                        TextInput::make('name')
+                            ->required()
+                            ->maxLength(255),
+                    ]),
                 TextInput::make('amount')
                     ->label('Amount')
                     ->required()
@@ -40,6 +62,10 @@ class ExpenseForm
                     ->minValue(0)
                     ->step(0.01)
                     ->prefix(fn($get) => $currencyCodeMap[$get('amount_currency_id')] ?? '$'),
+                DatePicker::make('execution_date')
+                    ->label('Execution Date')
+                    ->required()
+                    ->default(now()),
                 Select::make('amount_currency_id')
                     ->label('Currency')
                     ->options($currencyOptions)
@@ -55,32 +81,6 @@ class ExpenseForm
                     ->step(0.01)
                     ->prefix($defaultCurrencyCode)
                     ->helperText('Automatically calculated based on exchange rates'),
-                DatePicker::make('execution_date')
-                    ->label('Execution Date')
-                    ->required()
-                    ->default(now()),
-                Select::make('account_id')
-                    ->relationship('account', 'name')
-                    ->required()
-                    ->searchable()
-                    ->optionsLimit(9999)
-                    ->default(fn() => Account::where('on_budget', true)->orderBy('created_at')->first()?->id),
-                Select::make('recipient_id')
-                    ->relationship('recipient', 'name')
-                    ->required()
-                    ->searchable()
-                    ->optionsLimit(9999)
-                    ->createOptionForm([
-                        TextInput::make('name')
-                            ->required()
-                            ->maxLength(255),
-                    ]),
-                Select::make('budget_subcategory_id')
-                    ->relationship('budgetSubcategory', 'name')
-                    ->required()
-                    ->label('Budget Subcategory')
-                    ->searchable()
-                    ->optionsLimit(9999),
                 FileUpload::make('bill_picture')
                     ->label('Bill Picture')
                     ->disk('local')

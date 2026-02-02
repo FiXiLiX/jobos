@@ -8,6 +8,10 @@ use App\Filament\Resources\Accounts\Pages\ListAccounts;
 use App\Filament\Resources\Accounts\Pages\ViewAccount;
 use App\Filament\Resources\Accounts\Schemas\AccountForm;
 use App\Filament\Resources\Accounts\Schemas\AccountInfolist;
+use App\Filament\Resources\Accounts\RelationManagers\IncomesRelationManager;
+use App\Filament\Resources\Accounts\RelationManagers\ExpensesRelationManager;
+use App\Filament\Resources\Accounts\RelationManagers\OutgoingTransfersRelationManager;
+use App\Filament\Resources\Accounts\RelationManagers\IncomingTransfersRelationManager;
 use App\Filament\Resources\Accounts\Tables\AccountsTable;
 use App\Models\Account;
 use BackedEnum;
@@ -44,7 +48,10 @@ class AccountResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            IncomesRelationManager::class,
+            ExpensesRelationManager::class,
+            OutgoingTransfersRelationManager::class,
+            IncomingTransfersRelationManager::class,
         ];
     }
 

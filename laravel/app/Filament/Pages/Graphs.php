@@ -8,6 +8,7 @@ use App\Models\Expense;
 use App\Models\Income;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
+use Livewire\Attributes\On;
 
 class Graphs extends Page
 {
@@ -44,5 +45,10 @@ class Graphs extends Page
             ->toArray();
 
         $this->selectedMonth = Carbon::now()->format('Y-m');
+    }
+
+    public function updatedSelectedMonth(): void
+    {
+        $this->dispatch('updateFilter', filter: $this->selectedMonth);
     }
 }

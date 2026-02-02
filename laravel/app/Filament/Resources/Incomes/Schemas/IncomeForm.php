@@ -32,15 +32,15 @@ class IncomeForm
 
         return $schema
             ->components([
-                Select::make('budget_income_id')
-                    ->relationship('budgetIncome', 'name')
-                    ->label('Income Category')
-                    ->searchable()
-                    ->preload()
-                    ->required(),
                 Select::make('account_id')
                     ->relationship('account', 'name')
                     ->label('Account')
+                    ->searchable()
+                    ->preload()
+                    ->required(),
+                Select::make('budget_income_id')
+                    ->relationship('budgetIncome', 'name')
+                    ->label('Income Category')
                     ->searchable()
                     ->preload()
                     ->required(),
@@ -51,6 +51,10 @@ class IncomeForm
                     ->minValue(0)
                     ->step(0.01)
                     ->prefix(fn($get) => $currencyCodeMap[$get('amount_currency_id')] ?? '$'),
+                DatePicker::make('execution_date')
+                    ->label('Execution Date')
+                    ->required()
+                    ->default(now()),
                 Select::make('amount_currency_id')
                     ->label('Currency')
                     ->options($currencyOptions)
@@ -65,10 +69,6 @@ class IncomeForm
                     ->step(0.01)
                     ->prefix($defaultCurrencyCode)
                     ->helperText('Automatically calculated based on exchange rates'),
-                DatePicker::make('execution_date')
-                    ->label('Execution Date')
-                    ->required()
-                    ->default(now()),
                 Select::make('created_by')
                     ->relationship('createdBy', 'name')
                     ->label('Created By')
